@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Democracy Guide: Your Interactive Election Assistant</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Primary Colors */
+            --primary: #667eea;
+            --primary-dark: #5a6fe0;
+            --secondary: #764ba2;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-hover: linear-gradient(135deg, var(--primary-dark) 0%, #683e92 100%);
+            
+            /* Status Colors */
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --error: #ef4444;
+            --error-light: #fee2e2;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            
+            /* UI Colors */
+            --bg-main: #f3f4f6;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            
+            /* Shadows & Transitions */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --shadow-hover: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Layout */
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* ----- Header & Hero ----- */
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 4rem 2rem 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: var(--bg-main);
+            transform: skewY(-3deg);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        /* ----- Container ----- */
+        .container {
+            max-width: var(--max-width);
+            margin: -3rem auto 3rem;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 20;
+        }
+
+        /* ----- Navigation Tabs ----- */
+        .nav-wrapper {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .nav-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: max-content;
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .tab-btn.active {
+            background: var(--gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        /* ----- Content Sections ----- */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* ----- Grid Layouts ----- */
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+
+        /* ----- Cards ----- */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            background: -webkit-linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+
+        .card ul {
+            list-style: none;
+        }
+
+        .card ul li {
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .card ul li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--success);
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+
+        /* Gradient Info Card */
+        .info-card {
+            background: var(--gradient);
+            color: white;
+            border: none;
+        }
+        .info-card .card-title, .info-card ul li, .info-card p {
+            color: white;
+            -webkit-text-fill-color: initial;
+        }
+        .info-card ul li::before {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* ----- Timeline ----- */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            width: 50%;
+            padding: 0 2.5rem;
+        }
+
+        .timeline-item:nth-child(odd) { left: 0; text-align: right; }
+        .timeline-item:nth-child(even) { left: 50%; }
+
+        .timeline-dot {
+            position: absolute;
+            top: 1rem;
+            width: 24px;
+            height: 24px;
+            background: var(--bg-card);
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot { right: -12px; }
+        .timeline-item:nth-child(even) .timeline-dot { left: -12px; }
+
+        .timeline-content {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border-top: 4px solid var(--primary);
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .timeline-date {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        /* ----- Voting Steps ----- */
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            display: flex;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .step-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .step-number {
+            background: var(--gradient);
+            color: white;
+            font-size: 2.5rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            padding: 2rem;
+            flex-grow: 1;
+        }
+        
+        .step-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .sub-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .method-card {
+            background: rgba(102, 126, 234, 0.05);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .method-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ----- Interactive Quiz ----- */
+        .quiz-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .quiz-progress {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .quiz-progress-bar {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option-btn {
+            padding: 1.2rem;
+            text-align: left;
+            background: var(--bg-main);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .option-btn::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: rgba(102, 126, 234, 0.05);
+            border-color: var(--primary);
+        }
+
+        .option-btn.correct {
+            background: var(--success-light);
+            border-color: var(--success);
+            color: #065f46;
+        }
+
+        .option-btn.correct::before {
+            border-color: var(--success);
+            background: var(--success);
+            box-shadow: inset 0 0 0 4px var(--success-light);
+        }
+
+        .option-btn.wrong {
+            background: var(--error-light);
+            border-color: var(--error);
+            color: #991b1b;
+        }
+
+        .option-btn.wrong::before {
+            border-color: var(--error);
+            background: var(--error);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .explanation-box {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+        .explanation-box.show {
+            display: block;
+        }
+
+        .explanation-box strong {
+            color: var(--primary-dark);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-next {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: none;
+            float: right;
+        }
+
+        .btn-next.show { display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-next:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+        .quiz-results {
+            text-align: center;
+            display: none;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            margin: 0 auto 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ----- Voter Checklist ----- */
+        .checklist-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .checklist-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .progress-container {
+            flex-grow: 1;
+            margin: 0 2rem;
+        }
+        
+        .checklist-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-icon {
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-icon:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .checklist-group {
+            margin-bottom: 2.5rem;
+        }
+
+        .checklist-group h3 {
+            color: var(--secondary);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem;
+            background: var(--bg-main);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .checklist-item:hover {
+            background: white;
+            border-color: var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .checklist-item.completed {
+            background: var(--success-light);
+            border-color: var(--success);
+        }
+
+        .checklist-item.completed .item-text {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .custom-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--text-secondary);
+            border-radius: 6px;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .checklist-item.completed .custom-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .custom-checkbox::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: white;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .checklist-item.completed .custom-checkbox::after {
+            opacity: 1;
+        }
+
+        .item-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        /* ----- FAQ Accordion ----- */
+        .faq-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-search {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-bottom: 2rem;
+            outline: none;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .faq-search:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .faq-category {
+            margin-bottom: 2rem;
+        }
+
+        .faq-category-title {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .faq-question:hover {
+            color: var(--primary);
+            background: #f8fafc;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+            color: var(--primary);
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            background: white;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .faq-answer ul {
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        /* ----- Animations ----- */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ----- Responsive Design ----- */
+        @media (max-width: 1024px) {
+            .timeline::before { left: 30px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 0; text-align: left !important; }
+            .timeline-item:nth-child(even), .timeline-item:nth-child(odd) { left: 0; }
+            .timeline-dot { left: 18px !important; }
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 3rem 1rem 5rem; }
+            .header-title { font-size: 2.2rem; }
+            .nav-wrapper { border-radius: var(--radius-md); }
+            .tab-btn { padding: 0.75rem 1rem; font-size: 0.9rem; }
+            .step-card { flex-direction: column; }
+            .step-number { width: 100%; height: 80px; font-size: 2rem; }
+            .quiz-wrapper, .checklist-wrapper { padding: 1.5rem; }
+            .checklist-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .progress-container { margin: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1 class="header-title">The Democracy Guide</h1>
+            <p class="header-subtitle">Your interactive, step-by-step companion to understanding the election process, voting, and participating in democracy.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Navigation Tabs -->
+        <nav class="nav-wrapper" role="tablist">
+            <button class="tab-btn active" data-target="overview" role="tab" aria-selected="true"><i class="fa-solid fa-landmark"></i> Overview</button>
+            <button class="tab-btn" data-target="timeline" role="tab" aria-selected="false"><i class="fa-solid fa-timeline"></i> Timeline</button>
+            <button class="tab-btn" data-target="voting-steps" role="tab" aria-selected="false"><i class="fa-solid fa-check-to-slot"></i> Voting Steps</button>
+            <button class="tab-btn" data-target="quiz" role="tab" aria-selected="false"><i class="fa-solid fa-clipboard-question"></i> Quiz</button>
+            <button class="tab-btn" data-target="checklist" role="tab" aria-selected="false"><i class="fa-solid fa-list-check"></i> Checklist</button>
+            <button class="tab-btn" data-target="faq" role="tab" aria-selected="false"><i class="fa-solid fa-circle-question"></i> FAQ</button>
+        </nav>
+
+        <!-- SECTION 1: Overview -->
+        <section id="overview" class="tab-content active" role="tabpanel">
+            <div class="section-header">
+                <h2>Understanding Elections</h2>
+                <p>The foundation of a democratic society is the right and responsibility to vote.</p>
+            </div>
+
+            <div class="grid-2" style="margin-bottom: 3rem;">
+                <div class="card info-card">
+                    <i class="fa-solid fa-users card-icon"></i>
+                    <h3 class="card-title">What is an Election?</h3>
+                    <p style="margin-bottom: 1rem; font-size: 1.1rem;">An election is a formal group decision-making process by which a population chooses an individual or multiple individuals to hold public office.</p>
+                    <p>It is the core mechanism of representative democracy, ensuring that the government is accountable to the people and reflects the will of the citizens.</p>
+                </div>
+                
+                <div class="card">
+                    <i class="fa-solid fa-layer-group card-icon"></i>
+                    <h3 class="card-title">Types of Elections</h3>
+                    <ul>
+                        <li><strong>General Elections:</strong> Nationwide or statewide elections for major offices.</li>
+                        <li><strong>Primary Elections:</strong> Preliminary elections to select party candidates.</li>
+                        <li><strong>Local Elections:</strong> Selection of municipal, county, and local officials.</li>
+                        <li><strong>Special Elections:</strong> Held to fill unexpected vacancies.</li>
+                        <li><strong>Referendums/Initiatives:</strong> Direct voting on specific laws or policies.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="text-align: center; margin-bottom: 2rem; font-size: 2rem; color: var(--secondary);">Key Components</h3>
+            <div class="grid-2">
+                <div class="card">
+                    <i class="fa-solid fa-id-card card-icon"></i>
+                    <h3 class="card-title">1. Voter Registration</h3>
+                    <ul>
+                        <li>Must meet age (18+), citizenship, and residency requirements.</li>
+                        <li>Registration processes vary by state (online, mail, in-person).</li>
+                        <li>Deadlines are critical and strictly enforced.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-bullhorn card-icon"></i>
+                    <h3 class="card-title">2. Campaign Period</h3>
+                    <ul>
+                        <li>Candidates present their platforms and policies to the public.</li>
+                        <li>Includes debates, town halls, and media advertisements.</li>
+                        <li>Intensive voter outreach and fundraising activities.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-person-booth card-icon"></i>
+                    <h3 class="card-title">3. Voting Day</h3>
+                    <ul>
+                        <li>Citizens cast ballots at designated polling locations or via mail.</li>
+                        <li>Strict rules ensure ballot privacy and security.</li>
+                        <li>Options include in-person, early voting, and absentee.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <i class="fa-solid fa-chart-pie card-icon"></i>
+                    <h3 class="card-title">4. Counting & Results</h3>
+                    <ul>
+                        <li>Rigorous counting and verification procedures by officials.</li>
+                        <li>Result certification to make outcomes official.</li>
+                        <li>Established recount procedures for extremely close races.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Timeline -->
+        <section id="timeline" class="tab-content" role="tabpanel">
+            <div class="section-header">
+                <h2>The Election Journey</h2>
+                <p>A chronological guide to the election process from start to finish.</p>
+            </div>
+
+            <div class="timeline">
+                <!-- Stage 1 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">12-18 Months Before</span>
+                        <h3>Exploratory Phase</h3>
+                        <p>Potential candidates form exploratory committees, begin initial fundraising, develop campaign infrastructure, and conduct strategic planning.</p>
+                    </div>
+                </div>
+                <!-- Stage 2 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">6-12 Months Before</span>
+                        <h3>Official Announcements</h3>
+                        <p>Formal candidacy declarations, campaign launch events, filing official paperwork, and initial policy platform releases.</p>
+                    </div>
+                </div>
+                <!-- Stage 3 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">3-6 Months Before</span>
+                        <h3>Primary Season</h3>
+                        <p>State-by-state primary elections/caucuses, candidate debates, delegate accumulation, and intensive media scrutiny.</p>
+                    </div>
+                </div>
+                <!-- Stage 4 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">2-3 Months Before</span>
+                        <h3>General Campaign</h3>
+                        <p>Party conventions, final candidate selections, general election debates, intensive touring, and early voting begins in some states.</p>
+                    </div>
+                </div>
+                <!-- Stage 5 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">30 Days Before</span>
+                        <h3>Final Push</h3>
+                        <p>Last voter registration deadlines, peak advertising spending, massive get-out-the-vote operations, and absentee ballot distribution.</p>
+                    </div>
+                </div>
+                <!-- Stage 6 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">Election Day</span>
+                        <h3>Voting Day</h3>
+                        <p>Polls open (typically 6 AM - 8 PM), in-person voting occurs, exit polling is conducted, and mail-in ballots reach their final deadline.</p>
+                    </div>
+                </div>
+                <!-- Stage 7 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">Election Night</span>
+                        <h3>Initial Results</h3>
+                        <p>Vote counting begins, preliminary results and media projections are announced, followed by victory or concession speeches.</p>
+                    </div>
+                </div>
+                <!-- Stage 8 -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">Days-Weeks After</span>
+                        <h3>Certification</h3>
+                        <p>Official vote counts are completed, provisional ballots verified, potential recounts occur, legal challenges resolved, and results are certified.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Voting Steps -->
+        <section id="voting-steps" class="tab-content" role="tabpanel">
+            <div class="section-header">
+                <h2>How to Vote: Step-by-Step</h2>
+                <p>Your practical guide to successfully participating in democracy.</p>
+            </div>
+
+            <div class="step-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Check Your Eligibility</h3>
+                        <p>Before doing anything else, ensure you are legally allowed to vote.</p>
+                        <ul style="margin-top: 1rem; list-style-type: disc; padding-left: 1.5rem; color: var(--text-secondary);">
+                            <li>Age requirement: Must be 18 years or older by election day.</li>
+                            <li>Citizenship: Must be a legal citizen.</li>
+                            <li>Residency: Must meet your state or local residency requirements.</li>
+                            <li>Restrictions: Check state laws regarding felony convictions or mental competency standards.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Register to Vote</h3>
+                        <p>You cannot vote if you are not registered before the deadline.</p>
+                        <div class="sub-steps">
+                            <div class="method-card">
+                                <h4><i class="fa-solid fa-laptop"></i> Online</h4>
+                                <p>Many states offer quick online registration portals.</p>
+                            </div>
+                            <div class="method-card">
+                                <h4><i class="fa-solid fa-envelope"></i> By Mail</h4>
+                                <p>Print, fill out, and mail the national voter registration form.</p>
+                            </div>
+                            <div class="method-card">
+                                <h4><i class="fa-solid fa-building"></i> In-Person</h4>
+                                <p>Register at the DMV, post offices, or election offices.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Research Candidates & Issues</h3>
+                        <p>Make an informed decision before you receive your ballot.</p>
+                        <ul style="margin-top: 1rem; list-style-type: disc; padding-left: 1.5rem; color: var(--text-secondary);">
+                            <li>Read official voter guides and pamphlets.</li>
+                            <li>Review candidate websites and political platforms.</li>
+                            <li>Watch debate recordings and local news coverage.</li>
+                            <li>Use non-partisan fact-checking resources.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Choose Your Voting Method</h3>
+                        <p>Decide how you will cast your ballot based on what is available and convenient.</p>
+                        <div class="sub-steps">
+                            <div class="method-card">
+                                <h4><i class="fa-solid fa-person-walking"></i> Election Day</h4>
+                                <p>Find polling location, bring ID, check hours.</p>
+                            </div>
+                            <div class="method-card">
+                                <h4><i class="fa-solid fa-calendar-check"></i> Early Voting</h4>
+                                <p>Avoid crowds by voting at designated centers before election day.</p>
+                            </div>
+                            <div class="method-card">
+                                <h4><i class="fa-solid fa-envelope-open-text"></i> Mail-In / Absentee</h4>
+                                <p>Request ballot, fill carefully, sign, and return before deadline.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Prepare for Voting Day</h3>
+                        <p>A little preparation ensures a smooth experience.</p>
+                        <ul style="margin-top: 1rem; list-style-type: disc; padding-left: 1.5rem; color: var(--text-secondary);">
+                            <li>Review a sample ballot and make selections beforehand.</li>
+                            <li>Gather required identification (varies by state).</li>
+                            <li>Plan transportation and know your polling place hours.</li>
+                            <li>Know your voter rights (e.g., right to assistance, right to provisional ballot).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h3>Cast Your Ballot</h3>
+                        <p>The main event! Follow instructions carefully.</p>
+                        <ul style="margin-top: 1rem; list-style-type: disc; padding-left: 1.5rem; color: var(--text-secondary);">
+                            <li>Check in with poll workers and receive your ballot.</li>
+                            <li>Mark choices clearly filling in bubbles completely.</li>
+                            <li>Review your ballot before final submission.</li>
+                            <li>Don't forget to get your "I Voted" sticker!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">7</div>
+                    <div class="step-content">
+                        <h3>Track & Verify</h3>
+                        <p>Your civic duty doesn't end when the ballot is cast.</p>
+                        <ul style="margin-top: 1rem; list-style-type: disc; padding-left: 1.5rem; color: var(--text-secondary);">
+                            <li>Track your mail-in ballot online (if your state offers this).</li>
+                            <li>Watch for certified election results.</li>
+                            <li>Stay informed about the actions of those elected.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Interactive Quiz -->
+        <section id="quiz" class="tab-content" role="tabpanel">
+            <div class="section-header">
+                <h2>Test Your Knowledge</h2>
+                <p>See how much you know about the democratic election process.</p>
+            </div>
+
+            <div class="quiz-wrapper">
+                <div id="quiz-game">
+                    <div class="quiz-header">
+                        <span id="question-counter">Question 1 of 10</span>
+                        <span id="score-display">Score: 0</span>
+                    </div>
+                    
+                    <div class="quiz-progress">
+                        <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
+                    </div>
+
+                    <h3 class="question-text" id="question-text">Loading question...</h3>
+
+                    <div class="options-grid" id="options-container">
+                        <!-- Options injected via JS -->
+                    </div>
+
+                    <div class="explanation-box" id="explanation-box">
+                        <strong>Explanation:</strong>
+                        <span id="explanation-text"></span>
+                    </div>
+
+                    <button class="btn-next" id="btn-next">Next Question <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+                <div class="quiz-results" id="quiz-results">
+                    <h2>Quiz Completed!</h2>
+                    <p style="margin-bottom: 2rem; color: var(--text-secondary);">Here is your final score:</p>
+                    
+                    <div class="score-circle" id="final-score">
+                        80%
+                    </div>
+                    
+                    <p id="result-message" style="font-size: 1.2rem; margin-bottom: 2rem;"></p>
+                    
+                    <button class="btn-next show" id="btn-restart" style="float: none;">Restart Quiz <i class="fa-solid fa-rotate-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Voter Checklist -->
+        <section id="checklist" class="tab-content" role="tabpanel">
+            <div class="section-header">
+                <h2>Voter Preparation Checklist</h2>
+                <p>Keep track of your progress. Your data is saved automatically to your browser.</p>
+            </div>
+
+            <div class="checklist-wrapper">
+                <div class="checklist-header">
+                    <div>
+                        <h2 style="font-size: 1.8rem; color: var(--primary-dark);">Your Progress</h2>
+                        <span id="checklist-stats" style="color: var(--text-secondary);">0 of 0 items completed</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="quiz-progress" style="margin-bottom: 0; height: 12px; border-radius: 6px;">
+                            <div class="quiz-progress-bar" id="checklist-progress-bar" style="background: var(--success);"></div>
+                        </div>
+                    </div>
+                    <div class="checklist-actions">
+                        <button class="btn-icon" onclick="resetChecklist()" title="Reset Checklist"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                        <button class="btn-icon" onclick="window.print()" title="Print Checklist"><i class="fa-solid fa-print"></i> Print</button>
+                    </div>
+                </div>
+
+                <div id="checklist-container">
+                    <!-- Checklist items injected via JS to easily manage categories -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: FAQ -->
+        <section id="faq" class="tab-content" role="tabpanel">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Find answers to common questions about voting and elections.</p>
+            </div>
+
+            <div class="faq-wrapper">
+                <input type="text" id="faq-search" class="faq-search" placeholder="Search questions (e.g., 'ID', 'mail', 'deadline')...">
+
+                <!-- Category 1 -->
+                <div class="faq-category">
+                    <h3 class="faq-category-title"><i class="fa-solid fa-address-card" style="color: var(--primary);"></i> Registration</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I register to vote?</span>
+                            <i class="fa-solid fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>You can typically register online through your state's election website, by mail using the National Mail Voter Registration Form, or in-person at local election offices, DMVs, or armed services recruitment centers.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I register if I recently moved?</span>
+                            <i class="fa-solid fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes, but you must update your registration to your new address. If you move across state lines, you must register in your new state. Be aware of residency requirements (often 30 days) before an election.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What if I miss the registration deadline?</span>
+                            <i class="fa-solid fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Several states offer "Same-Day Registration" allowing you to register and vote on election day. In other states, missing the deadline means you cannot vote in the current election, but you should register for the next one.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 2 -->
+                <div class="faq-category">
+                    <h3 class="faq-category-title"><i class="fa-solid fa-check-to-slot" style="color: var(--primary);"></i> Voting Process</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What if I can't vote on election day?</span>
+                            <i class="fa-solid fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>You have options! Most states offer Early Voting periods before election day. Alternatively, you can request an Absentee or Mail-In Ballot to fill out at home and mail back before the deadline.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What ID do I need to bring?</span>
+                            <i class="fa-solid fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Voter ID laws vary drastically by state. Some require strict photo ID (like a driver's license or passport), some accept non-photo ID (like utility bills), and some require no ID if your signature matches. Always check your specific state's rules.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 3 -->
+                <div class="faq-category">
+                    <h3 class="faq-category-title"><i class="fa-solid fa-scale-balanced" style="color: var(--primary);"></i> Rights & Issues</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What if I'm turned away from the polls?</span>
+                            <i class="fa-solid fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Do not leave without voting! You have a federal right to cast a <strong>Provisional Ballot</strong>. This ballot will be kept separate and counted once your eligibility is verified after election day.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What if I make a mistake on my paper ballot?</span>
+                            <i class="fa-solid fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>If you make a mistake, do NOT attempt to cross it out. Ask a poll worker for a new ballot. The old, incorrect ballot will be voided securely. You are legally allowed to request a replacement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Application Logic -->
+    <script>
+        // ----- Tab Navigation Logic -----
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active classes
+                tabBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+                const targetId = btn.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+                
+                // Smooth scroll to top of main container
+                window.scrollTo({
+                    top: document.querySelector('.nav-wrapper').offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // ----- Interactive Quiz Logic -----
+        const quizData = [
+            {
+                question: "What is the minimum age to vote in most democratic countries?",
+                options: ["16 years old", "18 years old", "21 years old", "25 years old"],
+                correctAnswer: 1,
+                explanation: "Most democratic countries, including the United States, set the legal voting age at 18 years old."
+            },
+            {
+                question: "What is the main purpose of a primary election?",
+                options: ["To elect the President", "To select party candidates", "To fill a sudden vacancy", "To vote on local laws"],
+                correctAnswer: 1,
+                explanation: "Primary elections are held by political parties to allow members to select their official candidates for the upcoming general election."
+            },
+            {
+                question: "What is the primary benefit of a secret ballot?",
+                options: ["It saves paper", "It makes counting faster", "It protects voter privacy and prevents coercion", "It allows non-citizens to vote"],
+                correctAnswer: 2,
+                explanation: "Secret ballots ensure that a voter's choices are private, which prevents voter intimidation, coercion, and vote-buying."
+            },
+            {
+                question: "When must you usually register to vote?",
+                options: ["On election day only", "Before a specific deadline prior to the election", "After the primary election", "Anytime during the voting process"],
+                correctAnswer: 1,
+                explanation: "While some states allow same-day registration, most require you to register before a specific deadline (often 15-30 days before the election)."
+            },
+            {
+                question: "What happens if a voter makes a mistake on a paper ballot?",
+                options: ["Their vote is canceled entirely", "They must cross it out heavily", "They can ask a poll worker for a new ballot", "They must use white-out"],
+                correctAnswer: 2,
+                explanation: "If you make a mistake, you can ask a poll worker to void that ballot and provide you with a new, blank replacement ballot."
+            },
+            {
+                question: "What is a Provisional Ballot?",
+                options: ["A practice ballot", "A ballot used when a voter's eligibility is in question", "A ballot for military personnel", "An electronic ballot"],
+                correctAnswer: 1,
+                explanation: "If a voter's name is not on the roll or they lack ID, they can cast a provisional ballot, which is counted after their eligibility is confirmed."
+            },
+            {
+                question: "What does 'Early Voting' allow citizens to do?",
+                options: ["Vote before turning 18", "Vote for the next election cycle", "Cast their ballot in person prior to election day", "Vote online"],
+                correctAnswer: 2,
+                explanation: "Early voting allows registered voters to cast their ballot in person at designated polling places on specific days before actual Election Day."
+            },
+            {
+                question: "Which of the following is typically NOT allowed inside a voting booth?",
+                options: ["A sample ballot", "Campaign merchandise/clothing", "Written notes", "Your ID"],
+                correctAnswer: 1,
+                explanation: "Most states strictly prohibit 'electioneering' near or inside polling places, which includes wearing campaign shirts, buttons, or hats."
+            },
+            {
+                question: "Who is responsible for counting the votes?",
+                options: ["The federal government", "The candidates' staff", "Local/state election officials and poll workers", "News media outlets"],
+                correctAnswer: 2,
+                explanation: "Elections are administered locally. Trained, bipartisan local election officials and poll workers are responsible for counting ballots securely."
+            },
+            {
+                question: "What is an Absentee Ballot?",
+                options: ["A ballot cast by someone who cannot attend the polling place", "A ballot with missing candidates", "A ballot cast by a deceased person", "A blank ballot"],
+                correctAnswer: 0,
+                explanation: "An absentee ballot is a vote cast by someone who is unable or unwilling to attend the official polling station to which the voter is normally allocated."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let quizActive = true;
+
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const questionCounter = document.getElementById('question-counter');
+        const scoreDisplay = document.getElementById('score-display');
+        const progressBar = document.getElementById('quiz-progress-bar');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const btnNext = document.getElementById('btn-next');
+        const quizGame = document.getElementById('quiz-game');
+        const quizResults = document.getElementById('quiz-results');
+
+        function loadQuestion() {
+            const q = quizData[currentQuestion];
+            questionText.textContent = q.question;
+            questionCounter.textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
+            progressBar.style.width = `${((currentQuestion) / quizData.length) * 100}%`;
+            
+            optionsContainer.innerHTML = '';
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => selectAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            explanationBox.classList.remove('show');
+            btnNext.classList.remove('show');
+            quizActive = true;
+        }
+
+        function selectAnswer(selectedIndex, selectedBtn) {
+            if (!quizActive) return;
+            quizActive = false;
+
+            const correctIndex = quizData[currentQuestion].correctAnswer;
+            const buttons = optionsContainer.children;
+
+            // Disable all buttons
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].disabled = true;
+                if (i === correctIndex) {
+                    buttons[i].classList.add('correct');
+                }
+            }
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+            } else {
+                selectedBtn.classList.add('wrong');
+            }
+
+            explanationText.textContent = quizData[currentQuestion].explanation;
+            explanationBox.classList.add('show');
+            btnNext.classList.add('show');
+        }
+
+        btnNext.addEventListener('click', () => {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        function showResults() {
+            quizGame.style.display = 'none';
+            quizResults.style.display = 'block';
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            document.getElementById('final-score').textContent = `${percentage}%`;
+            
+            let msg = "";
+            if (percentage >= 90) msg = "Excellent! You are a democracy expert! 🏆";
+            else if (percentage >= 70) msg = "Great job! You know your way around an election. 👍";
+            else msg = "Good effort! Review the Overview and Voting Steps to learn more. 📚";
+            
+            document.getElementById('result-message').textContent = msg;
+        }
+
+        document.getElementById('btn-restart').addEventListener('click', () => {
+            currentQuestion = 0;
+            score = 0;
+            scoreDisplay.textContent = `Score: 0`;
+            quizGame.style.display = 'block';
+            quizResults.style.display = 'none';
+            loadQuestion();
+        });
+
+        // Initialize Quiz
+        loadQuestion();
+
+
+        // ----- Voter Checklist Logic -----
+        const checklistData = [
+            { id: 'chk1', category: '3 Months Before', text: 'Check voter registration status' },
+            { id: 'chk2', category: '3 Months Before', text: 'Update address if recently moved' },
+            { id: 'chk3', category: '3 Months Before', text: 'Verify eligibility to vote' },
+            { id: 'chk4', category: '2 Months Before', text: 'Register to vote (if not already)' },
+            { id: 'chk5', category: '2 Months Before', text: 'Research candidates and ballot measures' },
+            { id: 'chk6', category: '2 Months Before', text: 'Decide on your voting method (Mail, Early, Day-of)' },
+            { id: 'chk7', category: '1 Month Before', text: 'Confirm exact polling location and hours' },
+            { id: 'chk8', category: '1 Month Before', text: 'Request absentee/mail ballot (if applicable)' },
+            { id: 'chk9', category: '1 Month Before', text: 'Check state ID requirements' },
+            { id: 'chk10', category: '1 Week Before', text: 'Complete and return mail-in ballot' },
+            { id: 'chk11', category: '1 Week Before', text: 'Review a sample ballot' },
+            { id: 'chk12', category: 'Election Day', text: 'Bring required ID to polling place' },
+            { id: 'chk13', category: 'Election Day', text: 'Submit ballot and get confirmation/sticker' }
+        ];
+
+        const checklistContainer = document.getElementById('checklist-container');
+        let savedChecklist = JSON.parse(localStorage.getItem('electionChecklist')) || {};
+
+        function renderChecklist() {
+            checklistContainer.innerHTML = '';
+            let currentCategory = '';
+
+            checklistData.forEach(item => {
+                if (item.category !== currentCategory) {
+                    currentCategory = item.category;
+                    const header = document.createElement('div');
+                    header.className = 'checklist-group';
+                    header.innerHTML = `<h3><i class="fa-regular fa-calendar-days"></i> ${currentCategory}</h3>`;
+                    checklistContainer.appendChild(header);
+                }
+
+                const group = checklistContainer.lastChild;
+                const isChecked = savedChecklist[item.id] ? 'completed' : '';
+                
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `checklist-item ${isChecked}`;
+                itemDiv.onclick = () => toggleChecklist(item.id, itemDiv);
+                itemDiv.innerHTML = `
+                    <div class="custom-checkbox"></div>
+                    <span class="item-text">${item.text}</span>
+                `;
+                group.appendChild(itemDiv);
+            });
+            updateChecklistProgress();
+        }
+
+        function toggleChecklist(id, element) {
+            element.classList.toggle('completed');
+            savedChecklist[id] = element.classList.contains('completed');
+            localStorage.setItem('electionChecklist', JSON.stringify(savedChecklist));
+            updateChecklistProgress();
+        }
+
+        function updateChecklistProgress() {
+            const total = checklistData.length;
+            const completed = Object.values(savedChecklist).filter(Boolean).length;
+            const percentage = Math.round((completed / total) * 100) || 0;
+            
+            document.getElementById('checklist-progress-bar').style.width = `${percentage}%`;
+            document.getElementById('checklist-stats').textContent = `${completed} of ${total} items completed (${percentage}%)`;
+        }
+
+        function resetChecklist() {
+            if(confirm('Are you sure you want to clear your checklist progress?')) {
+                savedChecklist = {};
+                localStorage.removeItem('electionChecklist');
+                renderChecklist();
+            }
+        }
+
+        // Initialize Checklist
+        renderChecklist();
+
+
+        // ----- FAQ Accordion & Search Logic -----
+        const faqItems = document.querySelectorAll('.faq-item');
+        const faqSearch = document.getElementById('faq-search');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                // Close others (optional, currently disabled for better UX to let multiple open)
+                // faqItems.forEach(i => { if(i !== item) i.classList.remove('active'); });
+                item.classList.toggle('active');
+            });
+        });
+
+        faqSearch.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const categories = document.querySelectorAll('.faq-category');
+
+            categories.forEach(cat => {
+                let hasVisible = false;
+                const items = cat.querySelectorAll('.faq-item');
+                
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    if (text.includes(term)) {
+                        item.style.display = 'block';
+                        hasVisible = true;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // Hide category title if no items visible
+                cat.querySelector('.faq-category-title').style.display = hasVisible ? 'block' : 'none';
+            });
+        });
+
+    </script>
+</body>
+</html>
