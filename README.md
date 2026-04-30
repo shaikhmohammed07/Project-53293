@@ -2,7 +2,6 @@
 
 Welcome to the **Democracy Guide**, a modern, interactive, and highly visual web application designed to educate and empower voters. This project aims to simplify the voting process through engaging tools and clear information.
 
-![Democracy Guide Hero Section](assets/images/hero_election.png)
 
 ## 🚀 Features
 
